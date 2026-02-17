@@ -12,7 +12,6 @@ class Transmitter:
     def _make_ntfy_headers(self, property: Property):
         return {
             "Click": property.url,
-            "Attach": property.image,
             "Filename": "property.jpg",
             "Title": property.address.strip(),
             "Priority": "5",

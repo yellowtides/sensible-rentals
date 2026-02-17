@@ -7,7 +7,10 @@ class Property:
     def __init__(self, listing: Listing):
         self.address = listing.title
         self.created_at = listing.publishDate
-        self.image = listing.media["images"][0]["size720x480"]
+        try:
+            self.image = listing.media["images"][0]["size720x480"]
+        except:
+            self.image = None
         self.url = listing.url
         self.id = listing.id
         self.price = listing.price
