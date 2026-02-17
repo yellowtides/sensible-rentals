@@ -2,7 +2,6 @@
 from enum import Enum
 from typing import List
 import json
-
 from src.core.distance_calculator.distance_calculator import DistanceCalculator
 from src.core.types.property import Property
 
@@ -19,6 +18,9 @@ class PropertyScoreAttributes:
         self.distance = checkers.distance_calculator.find_distance_from(
             property.address
         )
+        self.distance_in_minutes = round(
+            self.distance.duration_seconds / 60, 2
+        )
 
     def __str__(self):
         return json.dumps(self, default=vars)
@@ -29,8 +31,7 @@ class EligibilityCheck(Enum):
 
     def check(self, property_score_attributes: PropertyScoreAttributes) -> bool:
         if self is EligibilityCheck.WITHIN_35_MINUTES:
-            distance_in_seconds = property_score_attributes.distance.duration_seconds
-            return distance_in_seconds <= 35 * 60
+            return property_score_attributes.distance_in_minutes <= 60
         return True
 
 
