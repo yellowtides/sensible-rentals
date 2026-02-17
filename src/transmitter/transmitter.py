@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 
 from src.core.types.property import Property
@@ -15,7 +16,8 @@ class Transmitter:
             "Filename": "property.jpg",
             "Title": property.address.strip(),
             "Priority": "5",
-            "Tags": "house_with_garden"
+            "Tags": "house_with_garden",
+            "Actions": f"view, See on Daft, {property.url}"
         }
 
     def _make_ntfy_data(self, property: Property, property_score_attributes: PropertyScoreAttributes):
