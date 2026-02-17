@@ -4,6 +4,7 @@ from typing import List
 import json
 from src.core.distance_calculator.distance_calculator import DistanceCalculator
 from src.core.types.property import Property
+from datetime import timedelta, datetime
 
 
 class Checkers:
@@ -35,8 +36,8 @@ class EligibilityCheck(Enum):
         if self is EligibilityCheck.WITHIN_35_MINUTES_OF_WORKPLACE:
             return property_score_attributes.distance_in_minutes <= 35
         if self is EligibilityCheck.POSTED_1_DAY_AGO:
-            print(property_score_attributes.posted_at)
-            return property_score_attributes.posted_at <= 10000000
+            yesterday = datetime.now() - timedelta(days=1)
+            return property_score_attributes.posted_at / 1000 <= datetime.timestamp(yesterday)
         return True
 
 

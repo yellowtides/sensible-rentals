@@ -12,11 +12,17 @@ class PropertyFinder:
         self.daft_api = DaftSearch(SearchType.RENT)
         self.result = None
 
-    def search_properties(self, return_mock_data: bool = False) -> List[Property]:
+    def find_all_properties_until(self, last_property: Property, return_mock_data: bool = False) -> List[Property]:
         if return_mock_data:
             return [Property(Listing({'title': 'Rathmines Road Upper, Dublin 6, Rathgar, Dublin 6', 'publishDate': 0, 'image': {}})),
                     Property(Listing({'title': 'Ramleh Hall, Convent Avenue, Milltown, Dublin 6', 'publishDate': 0, 'image': {}}))]
         if self.result is None:
             self.result = self.daft_api.search(self.options)
-        listings = [listing for listing in self.result]
-        return list(map(Property, listings))
+        properties = []
+        for listing in self.result:
+            property = Property(listing)
+            if last_property and property.id == last_property.id:
+                # We've seen properties starting with this one. Break.
+                break
+            properties.append(property)
+        return properties
