@@ -14,16 +14,23 @@ DEFAULT_ROUTE_API_HEADERS = {'X-Goog-Api-Key': f'{API_KEY}',
                              'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters'}
 
 
-class Geocode:
-    def __init__(self, lat: float, lng: float):
-        self.lat = float(lat)
-        self.lng = float(lng)
+class LatLng:
+    def __init__(self, latitude: float, longitude: float):
+        self.latitude = latitude
+        self.longitude = longitude
 
-    def __dict__(self):
-        return {'location': {'latLng': {'latitude': self.lat, 'longitude': self.lng}}}
+
+class Location:
+    def __init__(self, latLng: LatLng):
+        self.latLng = latLng
+
+
+class Geocode:
+    def __init__(self, location: Location):
+        self.location = location
 
     def __str__(self):
-        return json.dumps(self.__dict__())
+        return json.dumps(self.__dict__)
 
 
 class Distance:
@@ -31,30 +38,27 @@ class Distance:
         self.distance_meters = int(distance_meters)
         self.duration_seconds = int(duration_seconds)
 
-    def __dict__(self):
-        return {'distance_meters': self.distance_meters, 'duration_seconds': self.duration_seconds}
-
     def __str__(self):
-        return json.dumps(self.__dict__())
+        return json.dumps(self.__dict__)
 
 
 class DistanceCalculator:
-    def __init__(self, destination: str):
-        self.destination = str(destination)
-        self.destination_geocode = self.geocode(destination)
+    def __init__(self, destination_address: str):
+        self.destination_address = str(destination_address)
+        self.destination_address_geocode = self.geocode(destination_address)
 
     def geocode(self, point: str) -> Geocode:
         params = {**DEFAULT_GEOCODE_API_PARAMS, **{'address': point}}
         response = requests.get(f"{GEOCODE_API_ROOT}", params=params)
         json_data = response.json()
         json_geocode = json_data['results'][0]['geometry']['location']
-        return Geocode(lat=json_geocode['lat'], lng=json_geocode['lng'])
+        return Geocode(Location(LatLng(latitude=json_geocode['lat'], longitude=json_geocode['lng'])))
 
-    def find_distance_to(self, point: str):
-        point_geocode = self.geocode(point)
-        payload = json.dumps({'origin': point_geocode.__dict__(),
-                             'destination': self.destination_geocode.__dict__(),
-                              **DEFAULT_ROUTE_API_PARAMS})
+    def find_distance_from(self, origin_address: str):
+        origin_address_geocode = self.geocode(origin_address)
+        payload = json.dumps({'origin': origin_address_geocode,
+                              'destination': self.destination_address_geocode,
+                              **DEFAULT_ROUTE_API_PARAMS}, default=vars)
         headers = {**DEFAULT_ROUTE_API_HEADERS}
         response = requests.post(f"{ROUTE_API_ROOT}",
                                  data=payload, headers=headers)

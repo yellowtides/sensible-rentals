@@ -3,7 +3,7 @@ A cronjob that finds sensible rentals in Ireland.
 
 # Dev setup
 
-## 1. Setup up virtual environment
+## 1. Set virtual environment up
 
 ```zsh
 python3 -m venv my-venv
@@ -16,15 +16,15 @@ source my-venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
-## 3. Make an `.env` with the following vars
+## 3. Create a `.env`
 ```env
 GOOGLE_API_KEY=...
-POINT_OF_INTEREST=...           (stuff you'd like to be close to)
+WORKPLACE_ADDRESS=...           (or any address you'd like to be close to)
 DAFT_USER_AGENT=...
 DAFT_CF_CLEARANCE=...
 ```
 
-## 4. Load 'em up and run it!
+## 4. Spin it up!
 ```zsh
 source .env && py -m src.main
 ```

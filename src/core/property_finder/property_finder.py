@@ -1,24 +1,24 @@
-from daft_scraper.search import DaftSearch, SearchType
-from daft_scraper.search.options import (
-    PropertyType, PropertyTypesOption,
-    PriceOption, BedOption
-)
-from daft_scraper.search.options_location import LocationsOption, Location
+from typing import List
 
-options = [
-    PropertyTypesOption([PropertyType.APARTMENT]),
-    LocationsOption([Location.DUBLIN_6_DUBLIN, Location.DUBLIN_6_DUBLIN]),
-    PriceOption(2000, 2600),
-    BedOption(1, 1),
-]
+from daft_scraper.search import DaftSearch, SearchType, Listing
+from src.core.types.property import Property
+
+from src.core.distance_calculator.distance_calculator import DistanceCalculator
 
 
-def find_properties():
-    api = DaftSearch(SearchType.RENT)
-    return [property.title for property in api.search(options)]
+class PropertyFinder:
+    def __init__(self, options):
+        self.options = options
+        self.daft_api = DaftSearch(SearchType.RENT)
+        self.result = None
 
+    def search_properties(self) -> List[Property]:
+        if self.result is None:
+            self.result = self.daft_api.search(self.options)
+        listings = [listing for listing in self.result]
+        return list(map(Property, listings))
 
-def find_properties():
-    # For now, return some mock data.
-    return ["Rathmines Road Upper, Dublin 6, Rathgar, Dublin 6",
-            "Ramleh Hall, Convent Avenue, Milltown, Dublin 6"]
+    def search_properties(self) -> List[Property]:
+        # For now, return some mock data.
+        return [Property(Listing({'title': 'Rathmines Road Upper, Dublin 6, Rathgar, Dublin 6', 'publishDate': 0, 'image': {}})),
+                Property(Listing({'title': 'Ramleh Hall, Convent Avenue, Milltown, Dublin 6', 'publishDate': 0, 'image': {}}))]
