@@ -21,17 +21,22 @@ class PropertyScoreAttributes:
         self.distance_in_minutes = round(
             self.distance.duration_seconds / 60, 2
         )
+        self.posted_at = property.created_at
 
     def __str__(self):
         return json.dumps(self, default=vars)
 
 
 class EligibilityCheck(Enum):
-    WITHIN_35_MINUTES = "within-35-minutes"
+    WITHIN_35_MINUTES_OF_WORKPLACE = "within-35-minutes"
+    POSTED_1_DAY_AGO = "posted-1-day-ago"
 
     def check(self, property_score_attributes: PropertyScoreAttributes) -> bool:
-        if self is EligibilityCheck.WITHIN_35_MINUTES:
-            return property_score_attributes.distance_in_minutes <= 60
+        if self is EligibilityCheck.WITHIN_35_MINUTES_OF_WORKPLACE:
+            return property_score_attributes.distance_in_minutes <= 35
+        if self is EligibilityCheck.POSTED_1_DAY_AGO:
+            print(property_score_attributes.posted_at)
+            return property_score_attributes.posted_at <= 10000000
         return True
 
 

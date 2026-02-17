@@ -30,11 +30,16 @@ PROPERTY_OPTIONS = [
     PriceOption(2000, 2600),
     BedOption(1, 1),
 ]
-
 property_finder = PropertyFinder(PROPERTY_OPTIONS)
+
+EXTRA_REQUIREMENTS = [
+    EligibilityCheck.WITHIN_35_MINUTES_OF_WORKPLACE,
+    EligibilityCheck.POSTED_1_DAY_AGO
+]
 checkers = Checkers(workplace_address=WORKPLACE_ADDRESS)
 eligibility_checker = EligibilityChecker(
-    eligibility_checks=[EligibilityCheck.WITHIN_35_MINUTES], checkers=checkers
+    eligibility_checks=EXTRA_REQUIREMENTS,
+    checkers=checkers
 )
 
 for property in property_finder.search_properties(return_mock_data=True):
