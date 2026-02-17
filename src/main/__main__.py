@@ -37,7 +37,7 @@ eligibility_checker = EligibilityChecker(
     eligibility_checks=[EligibilityCheck.WITHIN_35_MINUTES], checkers=checkers
 )
 
-for property in property_finder.search_properties():
+for property in property_finder.search_properties(return_mock_data=True):
     property_score = eligibility_checker.score_property(property)
     is_property_eligible = eligibility_checker.grade_property_score(
         property_score
