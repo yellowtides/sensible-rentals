@@ -26,5 +26,5 @@ DAFT_CF_CLEARANCE=...
 
 ## 4. Spin it up!
 ```zsh
-source .env && py -m src.main
+source my-venv/bin/activate && source .env && python3 .
 ```
