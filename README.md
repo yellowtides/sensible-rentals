@@ -1,5 +1,5 @@
 # sensible-rentals
-A cronjob that finds sensible rentals in Ireland.
+A notification job that finds sensible rentals in Ireland.
 
 # Dev setup
 
