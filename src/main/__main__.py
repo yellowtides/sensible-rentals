@@ -47,9 +47,7 @@ eligibility_checker = EligibilityChecker(
 )
 repository = Repository()
 last_property = repository.read_last_property()
-candidate_properties = property_finder.find_all_properties_until(
-    last_property=None, return_mock_data=False
-)
+candidate_properties = property_finder.find_all_properties_until(last_property)
 if len(candidate_properties) > 0:
     repository.write_last_property(candidate_properties[0])
 
