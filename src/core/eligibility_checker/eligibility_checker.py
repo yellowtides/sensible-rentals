@@ -37,7 +37,7 @@ class EligibilityCheck(Enum):
             return property_score_attributes.distance_in_minutes <= 35
         if self is EligibilityCheck.POSTED_1_DAY_AGO:
             yesterday = datetime.now() - timedelta(days=1)
-            return property_score_attributes.posted_at / 1000 <= datetime.timestamp(yesterday)
+            return property_score_attributes.posted_at / 1000 >= datetime.timestamp(yesterday)
         return True
 
 
